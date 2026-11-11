@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <cache-path name="receipt_pdfs" path="receipts/" />
+    <external-cache-path name="external_receipt_pdfs" path="receipts/" />
+    <cache-path name="updates" path="updates/" />
+</paths>

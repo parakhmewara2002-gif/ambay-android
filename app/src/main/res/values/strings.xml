@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AMBAY Billing</string>
+    <string name="shop_name">AMBAY MOBILE ACCESSORIES</string>
+
+    <!-- Role selection & Login -->
+    <string name="select_role">Aapka Role Chuniye</string>
+    <string name="owner_role">OWNER</string>
+    <string name="owner_desc">Pura shop control, settings, aur full access</string>
+    <string name="staff_role">STAFF</string>
+    <string name="staff_desc">Sirf scan aur print (Without-Bill billing)</string>
+    <string name="enter_password">Password daliye</string>
+    <string name="login_btn">Login Karo</string>
+    <string name="forgot_password">Password bhool gaye?</string>
+    <string name="wrong_password">Galat password!</string>
+    <string name="lockout_warning">Bahut zyada galat attempts. %d seconds intezar karo.</string>
+    <string name="biometric_prompt_title">AMBAY Billing Unlock</string>
+    <string name="biometric_prompt_desc">Apne fingerprint ya face se unlock karein</string>
+    <string name="biometric_cancel">Password use karein</string>
+
+    <!-- Setup Wizard -->
+    <string name="setup_title">Pehli Baar Setup</string>
+    <string name="setup_owner_pass_title">Owner Password Banayein</string>
+    <string name="setup_owner_pass_hint">Kam se kam 6 akshar ka password</string>
+    <string name="setup_recovery_title">Recovery Gmail Verify Karein</string>
+    <string name="setup_recovery_desc">Emergency me password reset karne ke liye Gmail jodiye</string>
+    <string name="setup_recovery_input_hint">owner@gmail.com</string>
+    <string name="setup_google_signin_btn">Google se Verify Karo</string>
+    <string name="setup_staff_pass_title">Staff Password Banayein</string>
+    <string name="setup_staff_pass_hint">Staff ke login ke liye password</string>
+    <string name="setup_pair_title">Website Server se Pair Karein</string>
+    <string name="setup_pair_desc">Owner website (Settings -> Linked Devices) par "Link a device" QR scan karo ya code paste karo</string>
+    <string name="setup_pair_scan_btn">QR Code Scan Karo</string>
+    <string name="setup_pair_paste_hint">AMBPAIR1....</string>
+    <string name="setup_pair_submit_btn">Pair Karo</string>
+    <string name="setup_complete_btn">Setup Pura Hua - Aage Badho</string>
+    <string name="wrong_google_account">Ye Gmail registered nahi hai. Sahi account chunein (%s)</string>
+
+    <!-- Staff Mode -->
+    <string name="tab_scan">Scan</string>
+    <string name="tab_print">Print</string>
+    <string name="scan_title">Item Scan Karo</string>
+    <string name="scan_next_item">Scan Next Item</string>
+    <string name="item_not_found">Ye code kisi item me nahi mila</string>
+    <string name="scanned_items_count">Scan hue: %d items</string>
+    <string name="cart_title">Bill Details</string>
+    <string name="view_cart">Cart Dekho</string>
+    <string name="checkout">Save aur Print Karo</string>
+    <string name="empty_cart">Cart khaali hai. Barcode scan karo.</string>
+
+    <!-- Cart & Billing -->
+    <string name="qty_label">Qty</string>
+    <string name="price_label">Rate</string>
+    <string name="discount_label">Discount</string>
+    <string name="max_discount_warning">Maximum discount ₹%.2f se zyada nahi de sakte!</string>
+    <string name="min_price_label">Min Price: ₹%.2f</string>
+    <string name="customer_name_hint">Grahak ka naam (optional)</string>
+    <string name="customer_phone_hint">Mobile number (optional)</string>
+    <string name="payment_mode_label">Payment Mode</string>
+    <string name="pay_cash">Cash</string>
+    <string name="pay_upi">UPI</string>
+    <string name="pay_card">Card</string>
+    <string name="pay_credit">Credit</string>
+    <string name="total_amount">Kul Rakam: ₹%.2f</string>
+    <string name="discount_total">Kul Discount: ₹%.2f</string>
+
+    <!-- Print Tab -->
+    <string name="print_recent_sales">Haliye Sales</string>
+    <string name="filter_today">Aaj</string>
+    <string name="filter_7days">Pichhle 7 Din</string>
+    <string name="search_sales_hint">Sale no, customer, item khojo...</string>
+    <string name="receipt_preview">Receipt Preview</string>
+    <string name="btn_print_thermal">Thermal Print (Bluetooth)</string>
+    <string name="btn_share_pdf">PDF Share Karo</string>
+    <string name="btn_reprint">Reprint Karo</string>
+    <string name="printer_select_title">Thermal Printer Chuniye</string>
+    <string name="printer_connecting">Printer se connect ho raha hai...</string>
+    <string name="printer_connected">Printer connected!</string>
+    <string name="printer_error">Printer se connect nahi ho paya. Bluetooth check karein.</string>
+    <string name="dhanyavaad">Dhanyavaad! Phir Padhaarein.</string>
+
+    <!-- Owner Mode -->
+    <string name="owner_dashboard">Owner Panel</string>
+    <string name="switch_to_staff">Staff View Dekhein</string>
+    <string name="manage_staff_pass">Staff Password Badlein</string>
+    <string name="linked_devices">Linked Devices</string>
+    <string name="sync_status_synced">Sab Synced Hai</string>
+    <string name="sync_status_pending">%d Sales Sync Baaki</string>
+    <string name="sync_status_offline">Offline Mode</string>
+    <string name="logout_device_msg">Is device ko owner ne logout kar diya</string>
+    <string name="logout">Logout Karo</string>
+
+    <!-- General -->
+    <string name="save">Save Karo</string>
+    <string name="cancel">Radd Karo</string>
+    <string name="confirm">Pakka Hai</string>
+    <string name="error">Khata</string>
+    <string name="success">Kamiyab</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Shopping bag / register icon in white and gold -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,42h40v38H34z" />
+    <path
+        android:fillColor="#FF9800"
+        android:pathData="M44,42V32c0,-5.5 4.5,-10 10,-10s10,4.5 10,10v10h-6V32c0,-2.2 -1.8,-4 -4,-4s-4,1.8 -4,4v10h-6z" />
+    <path
+        android:fillColor="#0B3D91"
+        android:pathData="M42,52h24v4H42z M42,60h18v4H42z M42,68h24v4H42z" />
+</vector>
