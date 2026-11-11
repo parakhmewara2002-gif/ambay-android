@@ -57,6 +57,7 @@ import com.ambay.billing.ui.components.NumCountUp
 import com.ambay.billing.ui.theme.BrandAccent
 import com.ambay.billing.ui.theme.BrandBlue
 import com.ambay.billing.ui.theme.BrandError
+import com.ambay.billing.ui.theme.BrandSuccess
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
