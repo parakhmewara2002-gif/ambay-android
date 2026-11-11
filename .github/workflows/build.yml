@@ -18,7 +18,14 @@ jobs:
         continue-on-error: true
         run: gradle testDebugUnitTest --stacktrace
       - name: Build release APK
-        run: gradle assembleRelease --stacktrace
+        run: |
+          set +e
+          gradle assembleRelease --stacktrace > build.log 2>&1
+          rc=$?
+          if [ $rc -ne 0 ]; then
+            grep -E "^e: |error:|What went wrong|Could not|FAILED|Unresolved|wrong" -A2 build.log | head -60 | while IFS= read -r l; do echo "::error::${l:0:300}"; done
+          fi
+          exit $rc
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
