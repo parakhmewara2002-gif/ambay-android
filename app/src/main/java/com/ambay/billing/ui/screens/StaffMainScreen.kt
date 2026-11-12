@@ -61,7 +61,7 @@ fun StaffMainScreen(
         bottomBar = {
             NavigationBar(
                 containerColor = Color.White,
-                tonalElevation = androidx.compose.ui.unit.dp.times(8)
+                tonalElevation = 8.dp
             ) {
                 NavigationBarItem(
                     selected = selectedTab == 0,
