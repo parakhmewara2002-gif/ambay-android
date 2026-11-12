@@ -28,7 +28,7 @@ import com.ambay.billing.ui.staff.StaffMainScreen
 import com.ambay.billing.ui.theme.AmbayTheme
 import com.ambay.billing.ui.theme.LivingGlassBackground
 import dagger.hilt.android.AndroidEntryPoint
-import dev.chrisbanes.haze.rememberHazeState
+import dev.chrisbanes.haze.HazeState
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,7 +46,7 @@ class MainActivity : FragmentActivity() {
             AmbayTheme {
                 val authVm: AuthViewModel = hiltViewModel()
                 val authUi by authVm.ui.collectAsState()
-                val hazeState = rememberHazeState()
+                val hazeState = remember { HazeState() }
                 var hasUpdateBadge by remember {
                     mutableStateOf(
                         getSharedPreferences("ambay_update_badge", Context.MODE_PRIVATE)
