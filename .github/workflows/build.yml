@@ -42,7 +42,7 @@ jobs:
           gradle assembleRelease --no-daemon > build.log 2>&1
           rc=$?
           if [ $rc -ne 0 ]; then
-            grep -E "^e: |What went wrong|Could not|Unresolved|error:" -A2 build.log | head -80 | while IFS= read -r l; do echo "::error::${l:0:300}"; done
+            (grep -i "haze" build.log | head -15; grep -E "^e: |What went wrong|Could not|Unresolved|error:" -A2 build.log)  | head -80 | while IFS= read -r l; do echo "::error::${l:0:300}"; done
           fi
           exit $rc
 
