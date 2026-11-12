@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brand_blue">#0B3D91</color>
-    <color name="brand_blue_dark">#062357</color>
-    <color name="brand_blue_light">#1E5BB8</color>
-    <color name="brand_accent">#FF9800</color>
-    <color name="brand_success">#2E7D32</color>
-    <color name="brand_error">#D32F2F</color>
-
-    <color name="surface_light">#F8F9FE</color>
-    <color name="surface_dark">#12141A</color>
-    <color name="card_light">#FFFFFF</color>
-    <color name="card_dark">#1E222D</color>
+    <color name="brand_deep_blue">#FF0B3D91</color>
+    <color name="brand_cyan">#FF00B8D9</color>
+    <color name="splash_bg">#FF061B44</color>
 </resources>

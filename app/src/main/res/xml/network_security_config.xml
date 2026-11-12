@@ -5,11 +5,4 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    <!-- Allow cleartext for localhost testing only in debug builds if needed -->
-    <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">pages.dev</domain>
-        <domain includeSubdomains="true">workers.dev</domain>
-        <domain includeSubdomains="true">google.com</domain>
-        <domain includeSubdomains="true">googleapis.com</domain>
-    </domain-config>
 </network-security-config>

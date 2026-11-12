@@ -2,9 +2,24 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
 }
+
+fun propOrEnv(name: String, default: String = ""): String {
+    val prop = project.findProperty(name)?.toString()
+    if (!prop.isNullOrBlank()) return prop
+    val env = System.getenv(name)
+    if (!env.isNullOrBlank()) return env
+    return default
+}
+
+val runNumber = propOrEnv("GITHUB_RUN_NUMBER", "1").toIntOrNull()?.coerceAtLeast(1) ?: 1
+val enableMinify = propOrEnv("AMBAY_MINIFY", "false").toBoolean()
+val baseUrl = propOrEnv("AMBAY_BASE_URL", "https://ambay-registry.workers.dev")
+val updateRepo = propOrEnv("AMBAY_UPDATE_REPO", "parakhmewara2002-gif/ambay-android")
+val googleWebClientId = propOrEnv("AMBAY_GOOGLE_WEB_CLIENT_ID", "")
 
 android {
     namespace = "com.ambay.billing"
@@ -14,46 +29,38 @@ android {
         applicationId = "com.ambay.billing"
         minSdk = 26
         targetSdk = 35
-        // CI sets GITHUB_RUN_NUMBER -> every build is newer than the last (updater compares tag v1.0.<versionCode>)
-        val runNo = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
-        versionCode = runNo
-        versionName = "1.0.$runNo"
-        buildConfigField("String", "UPDATE_REPO", "\"parakhmewara2002-gif/ambay-android\"")
+        versionCode = runNumber
+        versionName = "1.0.$runNumber"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "DEFAULT_BASE_URL", "\"https://ambay-registry.parakhmewara.workers.dev\"")
-        buildConfigField("String", "WEBVIEW_URL", "\"https://ambay-billing.pages.dev\"")
-        buildConfigField("String", "SHOP_NAME", "\"AMBAY MOBILE ACCESSORIES\"")
-
-        ndk {
-            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-        }
+        buildConfigField("String", "BASE_URL", "\"${baseUrl.replace("\"", "\\\"")}\"")
+        buildConfigField("String", "UPDATE_REPO", "\"${updateRepo.replace("\"", "\\\"")}\"")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${googleWebClientId.replace("\"", "\\\"")}\"")
     }
 
     signingConfigs {
         create("release") {
-            // Fixed keystore so every build can install OVER the previous one (in-app update).
             storeFile = file("ambay-release.jks")
-            storePassword = "ambay-store-2026"
-            keyAlias = "ambay"
-            keyPassword = "ambay-store-2026"
+            storePassword = propOrEnv("AMBAY_KEYSTORE_PASS", "ambay2026release")
+            keyAlias = propOrEnv("AMBAY_KEY_ALIAS", "ambay")
+            keyPassword = propOrEnv("AMBAY_KEY_PASS", "ambay2026release")
         }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false   // first test builds: R8 off to avoid Hilt/Room/WebView keep-rule surprises; enable once verified on device
-            isShrinkResources = false
+            isMinifyEnabled = enableMinify
+            isShrinkResources = enableMinify
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
         }
         debug {
-            isMinifyEnabled = false
             applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
         }
     }
 
@@ -64,11 +71,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
-        freeCompilerArgs += listOf(
-            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-            "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
-            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
-        )
     }
 
     buildFeatures {
@@ -79,78 +81,81 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-            excludes += "META-INF/INDEX.LIST"
-            excludes += "META-INF/io.netty.versions.properties"
+            excludes += "/META-INF/versions/9/OSGI-INF/MANIFEST.MF"
         }
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.activity.compose)
-
-    // Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
 
-    // Hilt
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.ui.text.google.fonts)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.animation)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 
-    // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // Retrofit & OkHttp
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.scalars)
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logging)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.androidx.biometric)
 
-    // CameraX & ML Kit
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.play.services.auth)
+
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.mlkit.barcode.scanning)
 
-    // Biometric & Credentials & Security
-    implementation(libs.androidx.biometric)
-    implementation(libs.androidx.security.crypto)
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services.auth)
-    implementation(libs.google.android.libraries.identity.googleid)
-
-    // WorkManager
-    implementation(libs.androidx.work.runtime.ktx)
-
-    // Crypto
-    implementation(libs.bouncycastle.prov)
-
-    // Coroutines
+    implementation(libs.retrofit)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.android)
 
-    // Testing
+    implementation(libs.haze)
+    implementation(libs.haze.materials)
+    implementation(libs.lottie.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.zxing.core)
+    implementation(libs.androidx.profileinstaller)
+    implementation(libs.bouncycastle.prov)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(libs.okhttp.mockwebserver)
 }
